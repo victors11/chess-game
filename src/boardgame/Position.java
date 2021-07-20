@@ -11,6 +11,13 @@ public class Position {
 	private int row;
 	private int column;
 	
+	/**
+	 * generates a position that contains a row and a column (the representation of rows and columns are 
+	 * given by integers)
+	 * @param row
+	 * @param column
+	 */
+	
 	public Position(int row, int column) {
 		this.row = row;
 		this.column = column;
@@ -31,6 +38,11 @@ public class Position {
 	public void setColumn(int column) {
 		this.column = column;
 	}
+	
+	/**
+	 * Outputs a string showing the attributes of a position in row, column format.
+	 * @return a string that shows a position's row and column
+	 */
 	
 	@Override
 	public String toString() {

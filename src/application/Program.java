@@ -8,7 +8,7 @@ public class Program {
 		
 		Position p = new Position(1, 3);
 		
-		System.out.println(p);
+		p.toString();
 
 	}
 
