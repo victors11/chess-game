@@ -1,14 +1,18 @@
 package application;
 
-import boardgame.Position;
+import chess.ChessMatch;
+
+/**
+ * This class is responsible for running the application.
+ * @author João Victor
+ */
 
 public class Program {
 
 	public static void main(String[] args) {
 		
-		Position p = new Position(1, 3);
-		
-		p.toString();
+		ChessMatch chessMatch = new ChessMatch();
+		UI.printBoard(chessMatch.getPieces());
 
 	}
 

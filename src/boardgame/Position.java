@@ -14,8 +14,8 @@ public class Position {
 	/**
 	 * generates a position that contains a row and a column (the representation of rows and columns are 
 	 * given by integers)
-	 * @param row
-	 * @param column
+	 * @param row position row
+	 * @param column position column
 	 */
 	
 	public Position(int row, int column) {
