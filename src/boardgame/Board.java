@@ -2,7 +2,8 @@ package boardgame;
 
 /**
  * This class represents the board of a chess game. That's why it has a number of rows and columns, and it's also
- * associated with multiple pieces that are arranged in a matrix form on the board.
+ * associated with multiple pieces that are arranged in a matrix form on the board. We have that the matrix of 
+ * pieces, consists of the regions of the board, where the pieces are placed
  * 
  * @author João Victor
  */
@@ -66,6 +67,17 @@ public class Board {
 		return pieces[position.getRow()][position.getColumn()];
 	}
 	
+	/**
+	 * Put a piece in a position of the pieces matrix belonging to the board. To perform this procedure, the
+	 * method receives as a parameter, a position and a piece. When placing the piece in a matrix position, 
+	 * the piece position attribute is also changed, to the position referred as the method's argument.
+	 * @param piece piece
+	 * @param position board position
+	 */
 	
+	public void placePiece(Piece piece, Position position) {
+		pieces[position.getRow()][position.getColumn()] = piece;
+		piece.position = position;
+	}
 	
 }

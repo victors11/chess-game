@@ -15,9 +15,9 @@ public abstract class ChessPiece extends Piece {
 	private int moveCount;
 	
 	/**
-	 * 
-	 * @param board
-	 * @param color
+	 * creates a chess piece, which is associated with a board and has a color
+	 * @param board chessboard
+	 * @param color piece color
 	 */
 
 	public ChessPiece(Board board, Color color) {
