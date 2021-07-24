@@ -2,7 +2,6 @@ package boardgame;
 
 /**
  * this is an auxiliary class, responsible for representing the position of a piece on the board.
- * 
  * @author João Victor
  */
 

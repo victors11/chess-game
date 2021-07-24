@@ -1,7 +1,7 @@
 package boardgame;
 
 /**
- * This class represents the custom exception propagated by the programa in errors related to the board
+ * This class represents the custom exception propagated by the programa in errors related to the board layer
  * @author João Victor
  */
 
