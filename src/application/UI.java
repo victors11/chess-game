@@ -37,6 +37,17 @@ public class UI {
 	public static final String ANSI_CYAN_BACKGROUND = "\u001B[46m";
 	public static final String ANSI_WHITE_BACKGROUND = "\u001B[47m";
 	
+	// https://stackoverflow.com/questions/2979383/java-clear-the-console
+	/**
+	 * clean the terminal screen
+	 */
+	
+	public static void clearScreen() {
+		 System.out.print("\033[H\033[2J");
+		 System.out.flush();
+	}
+	
+	
 	/**
 	 * It will allow the program to read a chess position entered by the user
 	 * @return chess position entered by the user
