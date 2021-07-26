@@ -77,13 +77,19 @@ public class ChessMatch {
 
 	/**
 	 * validates if an origin position of a movement, there was a piece. Using the 
-	 * {@link boardgame.Board#thereIsAPiece(Position)} If the position that was passed as the method parameter 
-	 * does not contain a piece, then a ChessException will be thrown
+	 * {@link boardgame.Board#thereIsAPiece(Position)}, {@link boardgame.Board#piece(Position)} and
+	 * {@link boardgame.Piece#isThereAnyPossibleMove()}. If the position that was passed as the method parameter 
+	 * does not contain a piece, then a ChessException will be thrown. if a piece contained in the position 
+	 * passed as a parameter of this method, has no more possible moves, then this will imply that this position
+	 * containing that piece cannot be used as the source of a move, then a ChessException will also be thrown
 	 * @param sourcePosition source position of a movement 
 	 */
 	private void validateSourcePosition(Position sourcePosition) {
 		if(!board.thereIsAPiece(sourcePosition)) {
 			throw new ChessException("There is no piece on source position");
+		}
+		if(!board.piece(sourcePosition).isThereAnyPossibleMove()) {
+			throw new ChessException("There is no possible moves for the chosen piece");
 		}
 	}
 	

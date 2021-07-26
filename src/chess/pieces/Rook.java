@@ -30,4 +30,15 @@ public class Rook extends ChessPiece {
 	public String toString() {
 		return "R";
 	}
+	
+	/**
+	 * Implements rook chess piece move logic
+	 * @return a boolean matrix that will indicate the possible moves of the rook chess piece
+	 */
+	
+	@Override
+	public boolean[][] possibleMoves() {
+		boolean[][] matrix = new boolean[getBoard().getRows()][getBoard().getColumns()];
+		return matrix;
+	}
 }
