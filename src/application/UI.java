@@ -75,7 +75,27 @@ public class UI {
 		for (int row = 0; row < piecesMatrix.length; row++) {
 			System.out.print((8 - row) + " ");
 			for (int column = 0; column < piecesMatrix.length; column++) {
-				printPiece(piecesMatrix[row][column]);
+				printPiece(piecesMatrix[row][column], false);
+			}
+			System.out.println();
+		}
+		System.out.println("  a b c d e f g h");
+	}
+
+	/**
+	 * prints on the terminal screen, the matrix of chess pieces passed as method
+	 * parameter, in addition to indication of the possible movements of the
+	 * movement's source piece.
+	 * 
+	 * @param piecesMatrix  chess pieces matrix
+	 * @param possibleMoves possible movements of a piece
+	 */
+
+	public static void printBoard(ChessPiece[][] piecesMatrix, boolean[][] possibleMoves) {
+		for (int row = 0; row < piecesMatrix.length; row++) {
+			System.out.print((8 - row) + " ");
+			for (int column = 0; column < piecesMatrix.length; column++) {
+				printPiece(piecesMatrix[row][column], possibleMoves[row][column]);
 			}
 			System.out.println();
 		}
@@ -88,11 +108,15 @@ public class UI {
 	 * is printed.
 	 * 
 	 * @param chessPiece chess piece
+	 * @param background a boolean that if true will paint the background of a chess position
 	 */
 
-	private static void printPiece(ChessPiece piece) {
+	private static void printPiece(ChessPiece piece, boolean background) {
+		if (background) {
+			System.out.print(ANSI_PURPLE_BACKGROUND);
+		}
 		if (piece == null) {
-			System.out.print("-");
+			System.out.print("-" + ANSI_RESET);
 		} else {
 			if (piece.getColor() == Color.WHITE) {
 				System.out.print(ANSI_WHITE + piece + ANSI_RESET);

@@ -38,6 +38,7 @@ public abstract class Piece {
 	 * method will be abstract, as the possible moves of a generic piece are not
 	 * known, only of a specific type of chess piece, such as king or rook.
 	 */
+	
 	public abstract boolean[][] possibleMoves();
 
 	/**

@@ -46,6 +46,26 @@ public class ChessMatch {
 	}
 
 	/**
+	 * It will capture an source position that will be entered by the user, which
+	 * will be of a ChessPosition type. Then this position will be converted to a
+	 * Position by the {@link chess.ChessPosition#toPosition()} method, and then
+	 * that position will be validated by the
+	 * {@link #validateSourcePosition(Position)} method. After these procedures, the
+	 * Boolean of possible movements of the piece located in this position will be
+	 * returned through the {@link boardgame.Piece#possibleMoves()} method
+	 * 
+	 * @param sourcePosition source position
+	 * @return a boolean matrix that will indicate the possible target positions of
+	 *         a chess move
+	 */
+
+	public boolean[][] possibleMoves(ChessPosition sourcePosition) {
+		Position position = sourcePosition.toPosition();
+		validateSourcePosition(position);
+		return board.piece(position).possibleMoves();
+	}
+
+	/**
 	 * contains all the logic of validating and moving a piece, in a chess move. Two
 	 * chess coordinate positions are passed as method parameters, then converted to
 	 * board matrix position. Then a validation of the origin position is performed
