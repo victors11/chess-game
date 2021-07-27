@@ -3,6 +3,7 @@ package application;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+import chess.ChessMatch;
 import chess.ChessPiece;
 import chess.ChessPosition;
 import chess.Color;
@@ -65,6 +66,23 @@ public class UI {
 	}
 
 	/**
+	 * Will print the board through the {@link #printBoard(ChessPiece[][])} method,
+	 * added of the turn game information obtained from the methods :
+	 * {@link chess.ChessMatch#getTurn()} to print the current turn and
+	 * {@link chess.ChessMatch#getCurrentPlayer()} to show which player can make the
+	 * movement in the current turn
+	 * 
+	 * @param chessMatch a chess match
+	 */
+
+	public static void printMatch(ChessMatch chessMatch) {
+		printBoard(chessMatch.getPieces());
+		System.out.println();
+		System.out.println("Turn: " + chessMatch.getTurn());
+		System.out.println("Waiting player: " + chessMatch.getCurrentPlayer());
+	}
+
+	/**
 	 * prints on the terminal screen, the matrix of chess pieces passed as method
 	 * parameter. For each position on the board, a chess piece is printed.
 	 * 
@@ -108,7 +126,8 @@ public class UI {
 	 * is printed.
 	 * 
 	 * @param chessPiece chess piece
-	 * @param background a boolean that if true will paint the background of a chess position
+	 * @param background a boolean that if true will paint the background of a chess
+	 *                   position
 	 */
 
 	private static void printPiece(ChessPiece piece, boolean background) {

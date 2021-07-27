@@ -16,15 +16,29 @@ import chess.pieces.Rook;
 
 public class ChessMatch {
 
+	private int turn;
+	private Color currentPlayer;
 	private Board board;
 
 	/**
 	 * Creates a board of 8 rows and 8 columns and puts the chess pieces on the
-	 * board using the {@link #initialSetup()} method
+	 * board using the {@link #initialSetup()} method. In addition, a chess match
+	 * begins with turn 1, and in this first turn, the one that will carry out the
+	 * movement, will be the player with the white pieces
 	 */
 	public ChessMatch() {
 		board = new Board(8, 8);
+		turn = 1;
+		currentPlayer = Color.WHITE;
 		initialSetup();
+	}
+
+	public int getTurn() {
+		return turn;
+	}
+
+	public Color getCurrentPlayer() {
+		return currentPlayer;
 	}
 
 	/**
@@ -71,7 +85,9 @@ public class ChessMatch {
 	 * board matrix position. Then a validation of the origin position is performed
 	 * using the {@link #validateSourcePosition(Position)} method, and then the
 	 * logic of moving and capturing the pieces by the
-	 * {@link #makeMove(Position, Position)} method is performed
+	 * {@link #makeMove(Position, Position)} method is performed. When the movement
+	 * is finalized, the turn is changed by the {@link #nextTurn()} method, and
+	 * then, the captured piece is returned
 	 * 
 	 * @param sourcePosition source position
 	 * @param targetPosition targe position
@@ -84,14 +100,15 @@ public class ChessMatch {
 		validateSourcePosition(source);
 		validateTargetPosition(source, target);
 		Piece capturedPiece = makeMove(source, target);
+		nextTurn();
 		return (ChessPiece) capturedPiece;
 	}
 
 	/**
 	 * contains the piece move logic of the performChessMove method. A piece p is
 	 * dropped from the source of a move, and the captured piece is dropped from the
-	 * target of the move. So the piece p is placed on the move destination. Then
-	 * the captured part is returned with the end of the method execution.
+	 * target of the move. So the piece p is placed on the target move. Then the
+	 * captured piece is returned with the end of the method execution.
 	 * 
 	 * @param source source position
 	 * @param target target position
@@ -106,17 +123,17 @@ public class ChessMatch {
 	}
 
 	/**
-	 * validates if an origin position of a movement, there was a piece. Using the
-	 * {@link boardgame.Board#thereIsAPiece(Position)},
-	 * {@link boardgame.Board#piece(Position)} and
-	 * {@link boardgame.Piece#isThereAnyPossibleMove()}. If the position that was
-	 * passed as the method parameter does not contain a piece, then a
-	 * ChessException will be thrown. If a piece contained in the position passed as
-	 * a parameter of this method, has no more possible moves, then this will imply
-	 * that this position containing that piece cannot be used as the source of a
-	 * move, then a ChessException will also be thrown. A move in a chess game can
-	 * only occur from an origin position, which contains a piece that has possible
-	 * moves
+	 * Validates a source position of the movement after verification of compliance
+	 * of 3 possible conditions. If one of these conditions is fulfilled, then this
+	 * will mean that the position selected as the source position of the movement
+	 * is invalid. The 3 conditions are: IF there is no piece in the source position
+	 * and this will be checked by the
+	 * {@link boardgame.Board#thereIsAPiece(Position)} method. IF the source
+	 * position does not contain a color piece allowed by the current turn (that is,
+	 * if the piece does not belong to the player who will carry out the movement in
+	 * this turn). IF the source position contains a piece that has no possible
+	 * movements. A move in a chess game can only occur from an source position,
+	 * that contains a piece that has possible moves
 	 * 
 	 * @param sourcePosition source position of a movement
 	 */
@@ -124,6 +141,9 @@ public class ChessMatch {
 	private void validateSourcePosition(Position position) {
 		if (!board.thereIsAPiece(position)) {
 			throw new ChessException("There is no piece on source position");
+		}
+		if (currentPlayer != ((ChessPiece)board.piece(position)).getColor()) {
+			throw new ChessException("The chosen piece is not yours");
 		}
 		if (!board.piece(position).isThereAnyPossibleMove()) {
 			throw new ChessException("There is no possible moves for the chosen piece");
@@ -150,6 +170,19 @@ public class ChessMatch {
 		if (!board.piece(sourcePosition).possibleMove(targetPosition)) {
 			throw new ChessException("The chosen piece can't move to the target position");
 		}
+	}
+
+	/**
+	 * will change the turn match. When the turn is changed, the next player will be
+	 * the one to make a move, that is, when the current turn is the turn of the
+	 * white pieces, the next turn will be the turn of black pieces. When the
+	 * current turn is the turn of the black pieces, the next, will be that of the
+	 * white pieces
+	 */
+
+	private void nextTurn() {
+		turn++;
+		currentPlayer = (currentPlayer == Color.WHITE) ? Color.BLACK : Color.WHITE;
 	}
 
 	/**
