@@ -36,35 +36,33 @@ public class UI {
 	public static final String ANSI_PURPLE_BACKGROUND = "\u001B[45m";
 	public static final String ANSI_CYAN_BACKGROUND = "\u001B[46m";
 	public static final String ANSI_WHITE_BACKGROUND = "\u001B[47m";
-	
+
 	// https://stackoverflow.com/questions/2979383/java-clear-the-console
 	/**
 	 * clean the terminal screen
 	 */
-	
+
 	public static void clearScreen() {
-		 System.out.print("\033[H\033[2J");
-		 System.out.flush();
+		System.out.print("\033[H\033[2J");
+		System.out.flush();
 	}
-	
-	
+
 	/**
 	 * It will allow the program to read a chess position entered by the user
+	 * 
 	 * @return chess position entered by the user
 	 */
-	
+
 	public static ChessPosition readChessPosition(Scanner sc) {
 		try {
 			String typedPosition = sc.nextLine();
 			char column = typedPosition.charAt(0);
 			int row = Integer.parseInt(typedPosition.substring(1));
 			return new ChessPosition(column, row);
-		}
-		catch(RuntimeException e) {
+		} catch (RuntimeException e) {
 			throw new InputMismatchException("Error reading ChessPosition. Valid values are from a1 to h8.");
 		}
 	}
-	
 
 	/**
 	 * prints on the terminal screen, the matrix of chess pieces passed as method
@@ -74,7 +72,7 @@ public class UI {
 	 */
 
 	public static void printBoard(ChessPiece[][] piecesMatrix) {
-		for(int row = 0; row < piecesMatrix.length; row++) {
+		for (int row = 0; row < piecesMatrix.length; row++) {
 			System.out.print((8 - row) + " ");
 			for (int column = 0; column < piecesMatrix.length; column++) {
 				printPiece(piecesMatrix[row][column]);
@@ -93,20 +91,16 @@ public class UI {
 	 */
 
 	private static void printPiece(ChessPiece piece) {
-		if(piece == null) {
+		if (piece == null) {
 			System.out.print("-");
-		} 
-		else {
-			if(piece.getColor() == Color.WHITE) {
+		} else {
+			if (piece.getColor() == Color.WHITE) {
 				System.out.print(ANSI_WHITE + piece + ANSI_RESET);
-			}
-			else {
+			} else {
 				System.out.print(ANSI_YELLOW + piece + ANSI_RESET);
 			}
 		}
 		System.out.print(" ");
 	}
-	
-	
 
 }

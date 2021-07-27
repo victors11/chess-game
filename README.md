@@ -1,2 +1,3 @@
 # chess-game
-Console user interaction chess game system written in java
+chess game system written in java, that interacts with the user through the terminal
+
