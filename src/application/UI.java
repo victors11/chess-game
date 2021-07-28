@@ -1,7 +1,10 @@
 package application;
 
+import java.util.Arrays;
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 import chess.ChessMatch;
 import chess.ChessPiece;
@@ -66,17 +69,20 @@ public class UI {
 	}
 
 	/**
-	 * Will print the board through the {@link #printBoard(ChessPiece[][])} method,
-	 * added of the turn game information obtained from the methods :
-	 * {@link chess.ChessMatch#getTurn()} to print the current turn and
-	 * {@link chess.ChessMatch#getCurrentPlayer()} to show which player can make the
-	 * movement in the current turn
+	 * It will print the board, the pieces captured during the game and the turn
+	 * system information, respectively, through the
+	 * {@link #printBoard(ChessPiece[][])}, {@link #printCapturedPieces(List)},
+	 * {@link chess.ChessMatch#getTurn()} and
+	 * {@link chess.ChessMatch#getCurrentPlayer()} methods
 	 * 
 	 * @param chessMatch a chess match
+	 * @param captured   list of captured chess pieces
 	 */
 
-	public static void printMatch(ChessMatch chessMatch) {
+	public static void printMatch(ChessMatch chessMatch, List<ChessPiece> captured) {
 		printBoard(chessMatch.getPieces());
+		System.out.println();
+		printCapturedPieces(captured);
 		System.out.println();
 		System.out.println("Turn: " + chessMatch.getTurn());
 		System.out.println("Waiting player: " + chessMatch.getCurrentPlayer());
@@ -146,4 +152,20 @@ public class UI {
 		System.out.print(" ");
 	}
 
+	private static void printCapturedPieces(List<ChessPiece> capturedPieces) {
+		List<ChessPiece> whitePieces = capturedPieces.stream().filter(x -> x.getColor() == Color.WHITE)
+				.collect(Collectors.toList());
+		List<ChessPiece> blackPieces = capturedPieces.stream().filter(x -> x.getColor() == Color.BLACK)
+				.collect(Collectors.toList());
+
+		System.out.println("Captured pieces:");
+		System.out.print("White:");
+		System.out.print(ANSI_WHITE);
+		System.out.println(Arrays.toString(whitePieces.toArray())); // will print the white pieces list
+		System.out.print(ANSI_RESET);
+		System.out.print("Black:");
+		System.out.print(ANSI_YELLOW);
+		System.out.println(Arrays.toString(blackPieces.toArray())); // will print the black pieces list
+		System.out.print(ANSI_RESET);
+	}
 }

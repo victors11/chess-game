@@ -1,5 +1,8 @@
 package chess;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import boardgame.Board;
 import boardgame.Piece;
 import boardgame.Position;
@@ -19,6 +22,9 @@ public class ChessMatch {
 	private int turn;
 	private Color currentPlayer;
 	private Board board;
+
+	private List<Piece> piecesOnTheBoard = new ArrayList<>();
+	private List<Piece> capturedPieces = new ArrayList<>();
 
 	/**
 	 * Creates a board of 8 rows and 8 columns and puts the chess pieces on the
@@ -105,10 +111,12 @@ public class ChessMatch {
 	}
 
 	/**
-	 * contains the piece move logic of the performChessMove method. A piece p is
-	 * dropped from the source of a move, and the captured piece is dropped from the
-	 * target of the move. So the piece p is placed on the target move. Then the
-	 * captured piece is returned with the end of the method execution.
+	 * contains the piece move logic of the
+	 * {@link #performChessMove(ChessPosition, ChessPosition)} method. The logic of
+	 * a chess piece movement is:Takes the chess piece contained in the source of
+	 * the move, and puts that piece in the target of the move. If there was a piece
+	 * in the move target, it is then captured and removed from the board, making it
+	 * now part of the captured pieces list.
 	 * 
 	 * @param source source position
 	 * @param target target position
@@ -119,6 +127,10 @@ public class ChessMatch {
 		Piece p = board.removePiece(source);
 		Piece capturedPiece = board.removePiece(target);
 		board.placePiece(p, target);
+		if (capturedPiece != null) {
+			piecesOnTheBoard.remove(capturedPiece);
+			capturedPieces.add(capturedPiece);
+		}
 		return capturedPiece;
 	}
 
@@ -142,7 +154,7 @@ public class ChessMatch {
 		if (!board.thereIsAPiece(position)) {
 			throw new ChessException("There is no piece on source position");
 		}
-		if (currentPlayer != ((ChessPiece)board.piece(position)).getColor()) {
+		if (currentPlayer != ((ChessPiece) board.piece(position)).getColor()) {
 			throw new ChessException("The chosen piece is not yours");
 		}
 		if (!board.piece(position).isThereAnyPossibleMove()) {
@@ -188,8 +200,8 @@ public class ChessMatch {
 	/**
 	 * Put a chess piece on the board using the chess coordinate system. For this,
 	 * it makes use of the {@link boardgame.Board#placePiece(Piece, Position)}
-	 * method, when passing as parameters for this method a chess piece and a chess
-	 * coordinate position converted to a board matrix position
+	 * method. When placing a chess piece on the board, this piece will be part of
+	 * the list of pieces present on the board.
 	 * 
 	 * @param column column
 	 * @param row    row
@@ -198,6 +210,7 @@ public class ChessMatch {
 
 	private void placeNewPiece(char column, int row, ChessPiece piece) {
 		board.placePiece(piece, new ChessPosition(column, row).toPosition());
+		piecesOnTheBoard.add(piece);
 	}
 
 	/**
