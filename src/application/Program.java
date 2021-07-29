@@ -23,7 +23,7 @@ public class Program {
 		ChessMatch chessMatch = new ChessMatch();
 		List<ChessPiece> captured = new ArrayList<>();
 		
-		while(true) {
+		while(!chessMatch.getCheckMate()) {
 			try {
 				UI.clearScreen();
 				UI.printMatch(chessMatch, captured);
@@ -47,16 +47,15 @@ public class Program {
 			}
 			catch(ChessException e) {
 				System.out.println(e.getMessage());
-				sc.nextLine();  // comando utilizado para o programa aguardar o usuário apertar enter
+				sc.nextLine();  // command used to make the program wait for the user to press enter
 			}
 			catch(InputMismatchException e) {
 				System.out.println(e.getMessage());
-				sc.nextLine();  // comando utilizado para o programa aguardar o usuário apertar enter
+				sc.nextLine();  // command used to make the program wait for the user to press enter
 			}
-			
 		}
-		
-		
+		UI.clearScreen();
+		UI.printMatch(chessMatch, captured);
 	}
 
 }

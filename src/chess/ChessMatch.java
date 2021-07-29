@@ -23,6 +23,7 @@ public class ChessMatch {
 	private int turn;
 	private Color currentPlayer;
 	private boolean check;
+	private boolean checkMate;
 	private Board board;
 
 	private List<Piece> piecesOnTheBoard = new ArrayList<>();
@@ -48,9 +49,13 @@ public class ChessMatch {
 	public Color getCurrentPlayer() {
 		return currentPlayer;
 	}
-	
+
 	public boolean getCheck() {
 		return check;
+	}
+
+	public boolean getCheckMate() {
+		return checkMate;
 	}
 
 	/**
@@ -99,10 +104,11 @@ public class ChessMatch {
 	 * {@link #testCheck(Color)} method it is tested if as a consequence of the
 	 * current player's move, his king was checked. If the player checked himself,
 	 * then the move is undone by the {@link #undoMove(Position, Position, Piece)}
-	 * method and a ChessException is thrown. Afterwards, the testCheck(Color)
-	 * method is used again to test if the opponent has been checked. When the
-	 * movement is finalized, the turn is changed by the {@link #nextTurn()} method,
-	 * and then, the captured piece is returned
+	 * method and a ChessException is thrown. Afterwards, the {@link #testCheck(Color)}
+	 * method is used again to test if the opponent has been checked. Finally, 
+	 * it is tested whether the move resulted in a checkmate to the opponent using the 
+	 * {@link #checkMate} method. If it worked then the game will be over, if it didn't 
+	 * then the next turn will be executed by the {@link #nextTurn()} method
 	 * 
 	 * @param sourcePosition source position
 	 * @param targetPosition targe position
@@ -121,8 +127,13 @@ public class ChessMatch {
 		}
 
 		check = (testCheck(opponent(currentPlayer))) ? true : false;
-
-		nextTurn();
+		
+		if (testCheckMate(opponent(currentPlayer))){
+			checkMate = true;
+		}
+		else {
+			nextTurn();
+		}
 		return (ChessPiece) capturedPiece;
 	}
 
@@ -292,6 +303,56 @@ public class ChessMatch {
 	}
 
 	/**
+	 * tests if a player's move resulted in checkmate. If the king of the color
+	 * passed as parameter isn't already checked, then that means there is no chance
+	 * of checkmate, and this is tested by the {@link #testCheck(Color)} method.
+	 * Furthermore, if all the pieces of that color, don't have a possible move that
+	 * takes the king of that color out of the check state, then that player of that
+	 * color got a checkmate. So, for this to happen, all the allied pieces of the
+	 * king are collected to a list. In this way, all possible movements (returned
+	 * by {@link boardgame.Piece#possibleMoves()} method) of each of the pieces in
+	 * this list are verified. For each possible target position of a ally piece,
+	 * the ally piece is moved to those positions through the
+	 * {@link #makeMove(Position, Position)} method, and then after finishing the
+	 * move, the check status of the king is checked by the
+	 * {@link #testCheck(Color)} and the test move is undone by
+	 * {@link #undoMove(Position, Position, Piece)}. If in one of the possible
+	 * moves, one of the allied pieces changes the king's check state, then there
+	 * will be no checkmate. If after analyzing the possible moves of each of the
+	 * pieces, and the check status of the king is not changed, then there will be a
+	 * checkmate.
+	 * 
+	 * @param color player color
+	 * @return a boolean that if true will indicate that there was a checkmate
+	 */
+	private boolean testCheckMate(Color color) {
+		if (!testCheck(color)) {
+			return false;
+		}
+		List<Piece> alliedPieces = piecesOnTheBoard.stream().filter(x -> ((ChessPiece) x).getColor() == color)
+				.collect(Collectors.toList());
+		for (Piece ally : alliedPieces) {
+			boolean[][] matrix = ally.possibleMoves();
+			for (int row = 0; row < board.getRows(); row++) {
+				for (int column = 0; column < board.getColumns(); column++) {
+					if (matrix[row][column]) { // matrix[row][column] == true
+						Position source = ((ChessPiece) ally).getChessPosition().toPosition();
+						Position target = new Position(row, column);
+						Piece capturedPiece = makeMove(source, target);
+						boolean testCheck = testCheck(color);
+						undoMove(source, target, capturedPiece);
+						if (!testCheck) {
+							return false;
+						}
+					}
+				}
+			}
+
+		}
+		return true;
+	}
+
+	/**
 	 * Put a chess piece on the board using the chess coordinate system. For this,
 	 * it makes use of the {@link boardgame.Board#placePiece(Piece, Position)}
 	 * method. When placing a chess piece on the board, this piece will be part of
@@ -312,18 +373,11 @@ public class ChessMatch {
 	 * {@link #placeNewPiece(char, int, ChessPiece)}
 	 */
 	private void initialSetup() {
-		placeNewPiece('c', 1, new Rook(board, Color.WHITE));
-		placeNewPiece('c', 2, new Rook(board, Color.WHITE));
-		placeNewPiece('d', 2, new Rook(board, Color.WHITE));
-		placeNewPiece('e', 2, new Rook(board, Color.WHITE));
-		placeNewPiece('e', 1, new Rook(board, Color.WHITE));
-		placeNewPiece('d', 1, new King(board, Color.WHITE));
+		placeNewPiece('h', 7, new Rook(board, Color.WHITE));
+		placeNewPiece('d', 1, new Rook(board, Color.WHITE));
+		placeNewPiece('e', 1, new King(board, Color.WHITE));
 
-		placeNewPiece('c', 7, new Rook(board, Color.BLACK));
-		placeNewPiece('c', 8, new Rook(board, Color.BLACK));
-		placeNewPiece('d', 7, new Rook(board, Color.BLACK));
-		placeNewPiece('e', 7, new Rook(board, Color.BLACK));
-		placeNewPiece('e', 8, new Rook(board, Color.BLACK));
-		placeNewPiece('d', 8, new King(board, Color.BLACK));
+		placeNewPiece('b', 8, new Rook(board, Color.BLACK));
+		placeNewPiece('a', 8, new King(board, Color.BLACK));
 	}
 }

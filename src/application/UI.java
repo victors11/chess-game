@@ -67,11 +67,15 @@ public class UI {
 	}
 
 	/**
-	 * It will print the board, the pieces captured during the game and the turn
-	 * system information, respectively, through the
-	 * {@link #printBoard(ChessPiece[][])}, {@link #printCapturedPieces(List)},
-	 * {@link chess.ChessMatch#getTurn()} and
-	 * {@link chess.ChessMatch#getCurrentPlayer()} methods
+	 * It will print the board through the {@link #printBoard(ChessPiece[][])}
+	 * method, the indicator of the pieces captured through the
+	 * {@link #printCapturedPieces(List)} method and if there has not been a
+	 * checkmate (and this will be checked using
+	 * {@link chess.ChessMatch#getCheckMate()}) it will print respectively through
+	 * the {@link chess.ChessMatch#getTurn()} and
+	 * {@link chess.ChessMatch#getCheck()} methods, a message that will say which
+	 * player is the current turn and also warn if there is a check. If a checkmate
+	 * has occurred, it will print a congratulatory message to the winner.
 	 * 
 	 * @param chessMatch a chess match
 	 * @param captured   list of captured chess pieces
@@ -82,9 +86,14 @@ public class UI {
 		printCapturedPieces(captured);
 		System.out.println();
 		System.out.println("Turn: " + chessMatch.getTurn());
-		System.out.println("Waiting player: " + chessMatch.getCurrentPlayer());
-		if (chessMatch.getCheck()) {
-			System.out.println("CHECK!");
+		if (!chessMatch.getCheckMate()) {
+			System.out.println("Waiting player: " + chessMatch.getCurrentPlayer());
+			if (chessMatch.getCheck()) {
+				System.out.println("CHECK!");
+			}
+		} else {
+			System.out.println("CHECKMATE!");
+			System.out.println("Winner: " + chessMatch.getCurrentPlayer());
 		}
 	}
 
@@ -161,11 +170,9 @@ public class UI {
 	 */
 
 	private static void printCapturedPieces(List<ChessPiece> capturedPieces) {
-		List<ChessPiece> whitePieces = capturedPieces.stream()
-				.filter(x -> x.getColor() == Color.WHITE)
+		List<ChessPiece> whitePieces = capturedPieces.stream().filter(x -> x.getColor() == Color.WHITE)
 				.collect(Collectors.toList());
-		List<ChessPiece> blackPieces = capturedPieces.stream()
-				.filter(x -> x.getColor() == Color.BLACK)
+		List<ChessPiece> blackPieces = capturedPieces.stream().filter(x -> x.getColor() == Color.BLACK)
 				.collect(Collectors.toList());
 
 		System.out.println("Captured pieces:");
