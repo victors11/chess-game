@@ -30,6 +30,18 @@ public abstract class ChessPiece extends Piece {
 	public Color getColor() {
 		return color;
 	}
+	
+	public int getMoveCount() {
+		return moveCount;
+	}
+	
+	protected void increaseMoveCount() {
+		moveCount++;
+	}
+	
+	protected void decreaseMoveCount() {
+		moveCount--;
+	}
 
 	/**
 	 * returns the position of the chess piece in chess coordinate format. Thus, it

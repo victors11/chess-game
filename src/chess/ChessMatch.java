@@ -1,7 +1,6 @@
 package chess;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -104,11 +103,12 @@ public class ChessMatch {
 	 * {@link #testCheck(Color)} method it is tested if as a consequence of the
 	 * current player's move, his king was checked. If the player checked himself,
 	 * then the move is undone by the {@link #undoMove(Position, Position, Piece)}
-	 * method and a ChessException is thrown. Afterwards, the {@link #testCheck(Color)}
-	 * method is used again to test if the opponent has been checked. Finally, 
-	 * it is tested whether the move resulted in a checkmate to the opponent using the 
-	 * {@link #checkMate} method. If it worked then the game will be over, if it didn't 
-	 * then the next turn will be executed by the {@link #nextTurn()} method
+	 * method and a ChessException is thrown. Afterwards, the
+	 * {@link #testCheck(Color)} method is used again to test if the opponent has
+	 * been checked. Finally, it is tested whether the move resulted in a checkmate
+	 * to the opponent using the {@link #checkMate} method. If it worked then the
+	 * game will be over, if it didn't then the next turn will be executed by the
+	 * {@link #nextTurn()} method
 	 * 
 	 * @param sourcePosition source position
 	 * @param targetPosition targe position
@@ -127,11 +127,10 @@ public class ChessMatch {
 		}
 
 		check = (testCheck(opponent(currentPlayer))) ? true : false;
-		
-		if (testCheckMate(opponent(currentPlayer))){
+
+		if (testCheckMate(opponent(currentPlayer))) {
 			checkMate = true;
-		}
-		else {
+		} else {
 			nextTurn();
 		}
 		return (ChessPiece) capturedPiece;
@@ -143,16 +142,20 @@ public class ChessMatch {
 	 * a chess piece movement is:Takes the chess piece contained in the source of
 	 * the move, and puts that piece in the target of the move. If there was a piece
 	 * in the move target, it is then captured and removed from the board, making it
-	 * now part of the captured pieces list.
+	 * now part of the captured pieces list. Moreover, when a piece makes a move,
+	 * its move counter increases using the
+	 * {@link chess.ChessPiece#increaseMoveCount()} method
 	 * 
 	 * @param source source position
 	 * @param target target position
 	 * @return a captured piece at end of movement
 	 */
 	private Piece makeMove(Position source, Position target) {
-		Piece p = board.removePiece(source);
+		ChessPiece p = (ChessPiece) board.removePiece(source);
+		p.increaseMoveCount();
 		Piece capturedPiece = board.removePiece(target);
 		board.placePiece(p, target);
+		
 		if (capturedPiece != null) {
 			piecesOnTheBoard.remove(capturedPiece);
 			capturedPieces.add(capturedPiece);
@@ -168,14 +171,18 @@ public class ChessMatch {
 	 * list, to return to the list of pieces on the board. To remove and add the
 	 * pieces in their proper places, {@link boardgame.Board#removePiece(Position)}
 	 * and {@link boardgame.Board#placePiece(Piece, Position)} methods are used.
+	 * Moreover, when a piece undo a move, its move counter decreases using the
+	 * {@link chess.ChessPiece#decreaseMoveCount()} method
 	 * 
 	 * @param source        source position
 	 * @param target        target position
 	 * @param capturedPiece piece captured in the movement performed
 	 */
 	private void undoMove(Position source, Position target, Piece capturedPiece) {
-		Piece p = board.removePiece(target);
+		ChessPiece p = (ChessPiece) board.removePiece(target);
+		p.decreaseMoveCount();
 		board.placePiece(p, source);
+		
 		if (capturedPiece != null) {
 			board.placePiece(capturedPiece, target);
 			capturedPieces.remove(capturedPiece);
