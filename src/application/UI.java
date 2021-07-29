@@ -17,7 +17,6 @@ import chess.Color;
  * 
  * @author João Victor
  */
-
 public class UI {
 
 	// https://stackoverflow.com/questions/5762491/how-to-print-color-in-console-using-system-out-println
@@ -56,7 +55,6 @@ public class UI {
 	 * 
 	 * @return chess position entered by the user
 	 */
-
 	public static ChessPosition readChessPosition(Scanner sc) {
 		try {
 			String typedPosition = sc.nextLine();
@@ -78,7 +76,6 @@ public class UI {
 	 * @param chessMatch a chess match
 	 * @param captured   list of captured chess pieces
 	 */
-
 	public static void printMatch(ChessMatch chessMatch, List<ChessPiece> captured) {
 		printBoard(chessMatch.getPieces());
 		System.out.println();
@@ -86,6 +83,9 @@ public class UI {
 		System.out.println();
 		System.out.println("Turn: " + chessMatch.getTurn());
 		System.out.println("Waiting player: " + chessMatch.getCurrentPlayer());
+		if (chessMatch.getCheck()) {
+			System.out.println("CHECK!");
+		}
 	}
 
 	/**
@@ -94,7 +94,6 @@ public class UI {
 	 * 
 	 * @param piecesMatrix chess pieces matrix
 	 */
-
 	public static void printBoard(ChessPiece[][] piecesMatrix) {
 		for (int row = 0; row < piecesMatrix.length; row++) {
 			System.out.print((8 - row) + " ");
@@ -114,7 +113,6 @@ public class UI {
 	 * @param piecesMatrix  chess pieces matrix
 	 * @param possibleMoves possible movements of a piece
 	 */
-
 	public static void printBoard(ChessPiece[][] piecesMatrix, boolean[][] possibleMoves) {
 		for (int row = 0; row < piecesMatrix.length; row++) {
 			System.out.print((8 - row) + " ");
@@ -135,7 +133,6 @@ public class UI {
 	 * @param background a boolean that if true will paint the background of a chess
 	 *                   position
 	 */
-
 	private static void printPiece(ChessPiece piece, boolean background) {
 		if (background) {
 			System.out.print(ANSI_PURPLE_BACKGROUND);
@@ -152,10 +149,23 @@ public class UI {
 		System.out.print(" ");
 	}
 
+	/**
+	 * Prints the black and white pieces that were captured in the game. For that,
+	 * this method receives as parameter the list of captured pieces of the game,
+	 * and then from this list, two new lists are created, the one of captured white
+	 * pieces and the one of captured black pieces. So these lists are printed when
+	 * they are converted to Strings by the {@link java.util.Arrays#toString()}
+	 * method
+	 * 
+	 * @param capturedPieces captured pieces list
+	 */
+
 	private static void printCapturedPieces(List<ChessPiece> capturedPieces) {
-		List<ChessPiece> whitePieces = capturedPieces.stream().filter(x -> x.getColor() == Color.WHITE)
+		List<ChessPiece> whitePieces = capturedPieces.stream()
+				.filter(x -> x.getColor() == Color.WHITE)
 				.collect(Collectors.toList());
-		List<ChessPiece> blackPieces = capturedPieces.stream().filter(x -> x.getColor() == Color.BLACK)
+		List<ChessPiece> blackPieces = capturedPieces.stream()
+				.filter(x -> x.getColor() == Color.BLACK)
 				.collect(Collectors.toList());
 
 		System.out.println("Captured pieces:");

@@ -7,7 +7,6 @@ package boardgame;
  * 
  * @author João Victor
  */
-
 public abstract class Piece {
 
 	protected Position position;
@@ -20,7 +19,6 @@ public abstract class Piece {
 	 * 
 	 * @param board chessboard
 	 */
-
 	public Piece(Board board) {
 		this.board = board;
 		position = null;
@@ -38,7 +36,6 @@ public abstract class Piece {
 	 * method will be abstract, as the possible moves of a generic piece are not
 	 * known, only of a specific type of chess piece, such as king or rook.
 	 */
-	
 	public abstract boolean[][] possibleMoves();
 
 	/**
@@ -55,7 +52,6 @@ public abstract class Piece {
 	 *         piece to move to the referenced position. True if it's possible, and
 	 *         false for the opposite
 	 */
-
 	public boolean possibleMove(Position position) {
 		return possibleMoves()[position.getRow()][position.getColumn()];
 	}
@@ -74,7 +70,6 @@ public abstract class Piece {
 	 *         or not. If it can then the boolean value will match true, if it can't
 	 *         then it will match false
 	 */
-
 	public boolean isThereAnyPossibleMove() {
 		boolean[][] matrix = possibleMoves();
 		for (int i = 0; i < matrix.length; i++) {

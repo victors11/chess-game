@@ -8,7 +8,6 @@ package boardgame;
  * 
  * @author João Victor
  */
-
 public class Board {
 
 	private int rows;
@@ -26,7 +25,6 @@ public class Board {
 	 * @param rows    number of rows
 	 * @param columns number of columns
 	 */
-
 	public Board(int rows, int columns) {
 		if (rows < 1 || columns < 1) {
 			throw new BoardException("Error creating board: there must be at least 1 row and 1 column");
@@ -73,7 +71,6 @@ public class Board {
 	 * @param position one of the board positions
 	 * @return a piece given a position of the board
 	 */
-
 	public Piece piece(Position position) {
 		if (!positionExists(position)) {
 			throw new BoardException("Position not on the board");
@@ -94,7 +91,6 @@ public class Board {
 	 * @param piece    piece
 	 * @param position board position
 	 */
-
 	public void placePiece(Piece piece, Position position) {
 		if (thereIsAPiece(position)) {
 			throw new BoardException("There already is a piece on position " + position);
@@ -118,7 +114,6 @@ public class Board {
 	 * @param position board position
 	 * @return the piece of the board that was removed
 	 */
-
 	public Piece removePiece(Position position) {
 		if (!positionExists(position)) {
 			throw new BoardException("Position not on the board");
@@ -141,7 +136,6 @@ public class Board {
 	 * @return a boolean that will indicate whether or not a position exists on the
 	 *         board. Returns True for exists, and false for doesn't exist.
 	 */
-
 	private boolean positionExists(int row, int column) {
 		return row >= 0 && row < rows && column >= 0 && column < columns;
 	}
@@ -153,7 +147,6 @@ public class Board {
 	 * @return a boolean that will indicate whether or not a position exists on the
 	 *         board. Returns True for exists, and false for doesn't exist.
 	 */
-
 	public boolean positionExists(Position position) {
 		return positionExists(position.getRow(), position.getColumn());
 	}
@@ -170,7 +163,6 @@ public class Board {
 	 *         position on the board. Returns True if it exists, and false if it
 	 *         doesn't
 	 */
-
 	public boolean thereIsAPiece(Position position) {
 		if (!positionExists(position)) {
 			throw new BoardException("Position not on the board");

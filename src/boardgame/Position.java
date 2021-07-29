@@ -6,7 +6,6 @@ package boardgame;
  * 
  * @author João Victor
  */
-
 public class Position {
 
 	private int row;
@@ -19,7 +18,6 @@ public class Position {
 	 * @param row    position row
 	 * @param column position column
 	 */
-
 	public Position(int row, int column) {
 		this.row = row;
 		this.column = column;
@@ -47,7 +45,6 @@ public class Position {
 	 * @param row    a row
 	 * @param column a column
 	 */
-
 	public void setValues(int row, int column) {
 		this.row = row;
 		this.column = column;
@@ -58,7 +55,6 @@ public class Position {
 	 * 
 	 * @return a string that shows a position's row and column
 	 */
-
 	@Override
 	public String toString() {
 		return row + ", " + column;

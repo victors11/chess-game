@@ -11,7 +11,6 @@ import boardgame.Position;
  * 
  * @author João Victor
  */
-
 public abstract class ChessPiece extends Piece {
 
 	private Color color;
@@ -23,7 +22,6 @@ public abstract class ChessPiece extends Piece {
 	 * @param board chessboard
 	 * @param color piece color
 	 */
-
 	public ChessPiece(Board board, Color color) {
 		super(board);
 		this.color = color;
@@ -31,6 +29,17 @@ public abstract class ChessPiece extends Piece {
 
 	public Color getColor() {
 		return color;
+	}
+
+	/**
+	 * returns the position of the chess piece in chess coordinate format. Thus, it
+	 * converts the position type through the static method
+	 * {@link chess.ChessPosition#fromPosition(Position)}
+	 * 
+	 * @return a chess coordinate position
+	 */
+	public ChessPosition getChessPosition() {
+		return ChessPosition.fromPosition(position);
 	}
 
 	/**

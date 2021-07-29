@@ -13,7 +13,6 @@ import boardgame.Position;
  * 
  * @author João Victor
  */
-
 public class ChessPosition {
 
 	private char column;
@@ -27,7 +26,6 @@ public class ChessPosition {
 	 * @param column chess position column
 	 * @param row    chess position row
 	 */
-
 	public ChessPosition(char column, int row) {
 		if (column < 'a' || column > 'h' || row < 1 || row > 8) {
 			throw new ChessException("Error instantiating ChessPosition. Valid values are from a1 to h8");
@@ -65,14 +63,14 @@ public class ChessPosition {
 	/**
 	 * Converts a Position to ChessPosition. It will perform the exact opposite
 	 * procedure from toPosition. The column ChessPosition will be determined by
-	 * ('a' - column Position) and the row ChessPosition will be determined by (8 -
+	 * ('a' + column Position) and the row ChessPosition will be determined by (8 -
 	 * row Position)
 	 * 
 	 * @param position board position
 	 * @return a Position converted to ChessPosition
 	 */
 	protected static ChessPosition fromPosition(Position position) {
-		return new ChessPosition((char) ('a' - position.getColumn()), 8 - position.getRow());
+		return new ChessPosition((char) ('a' + position.getColumn()), 8 - position.getRow());
 	}
 
 	/**
@@ -82,7 +80,7 @@ public class ChessPosition {
 	 * @return a string that shows the position of a piece in the chess coordinate
 	 *         system. Example: "a1", "h8"
 	 */
-
+	@Override
 	public String toString() {
 		return "" + column + row;
 	}

@@ -5,7 +5,6 @@ package chess;
  * 
  * @author João Victor
  */
-
 public enum Color {
 	BLACK, WHITE;
 }

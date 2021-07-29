@@ -11,7 +11,6 @@ import chess.Color;
  * 
  * @author João Victor
  */
-
 public class Rook extends ChessPiece {
 
 	/**
@@ -21,7 +20,6 @@ public class Rook extends ChessPiece {
 	 * @param board chessboard
 	 * @param color piece color
 	 */
-
 	public Rook(Board board, Color color) {
 		super(board, color);
 	}
@@ -29,7 +27,6 @@ public class Rook extends ChessPiece {
 	/**
 	 * @return the symbol that will represent the rook piece
 	 */
-
 	@Override
 	public String toString() {
 		return "R";
@@ -53,7 +50,6 @@ public class Rook extends ChessPiece {
 	 * @return a boolean matrix that will indicate the possible moves of the rook
 	 *         chess piece
 	 */
-
 	@Override
 	public boolean[][] possibleMoves() {
 		boolean[][] matrix = new boolean[getBoard().getRows()][getBoard().getColumns()];

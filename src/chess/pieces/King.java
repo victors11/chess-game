@@ -11,7 +11,6 @@ import chess.Color;
  * 
  * @author João Victor
  */
-
 public class King extends ChessPiece {
 
 	/**
@@ -21,7 +20,6 @@ public class King extends ChessPiece {
 	 * @param board chessboard
 	 * @param color piece color
 	 */
-
 	public King(Board board, Color color) {
 		super(board, color);
 	}
@@ -29,7 +27,6 @@ public class King extends ChessPiece {
 	/**
 	 * @return the symbol that will represent the king piece
 	 */
-
 	@Override
 	public String toString() {
 		return "K";
@@ -48,7 +45,6 @@ public class King extends ChessPiece {
 	 * @return a boolean value that if true indicates that the king can move to the
 	 *         indicated position.
 	 */
-
 	private boolean canMove(Position position) {
 		ChessPiece p = (ChessPiece) getBoard().piece(position);
 		return p == null || p.getColor() != getColor();
