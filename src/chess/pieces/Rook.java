@@ -14,7 +14,7 @@ import chess.Color;
 public class Rook extends ChessPiece {
 
 	/**
-	 * creates the king chess piece, which is associated with a board and has a
+	 * creates the rook chess piece, which is associated with a board and has a
 	 * color
 	 * 
 	 * @param board chessboard
@@ -39,13 +39,15 @@ public class Rook extends ChessPiece {
 	 * above, left, right and below of the rook. At the end of this method, the
 	 * boolean matrix that will contain the marked positions will be returned. To
 	 * mark the positions above the rook, for example, the following logic will be
-	 * applied: From the first position above the rook the analysis will take
-	 * place. As long as the positions above the rook exist within the board and do
-	 * not contain a piece, those positions will be marked with true value. When
-	 * this repetition ends, it will be tested if there is one more position above,
-	 * and if that possible position contains an opponent piece, if these conditions
-	 * are met, then this position will also be marked as true. This same logic
-	 * occurs for the other directions in an adapted way
+	 * applied: From the first position above the rook the analysis will take place.
+	 * As long as the positions above the rook exist within the board using
+	 * {@link boardgame.Board#positionExists(Position)} and do not contain a piece
+	 * using {@link boardgame.Board#thereIsAPiece(Position)} those positions will be
+	 * marked with true value. When this repetition ends, it will be tested if there
+	 * is one more position above, and if that possible position contains an
+	 * opponent piece, if these conditions are met, then this position will also be
+	 * marked as true. This same logic occurs for the other directions in an adapted
+	 * way
 	 * 
 	 * @return a boolean matrix that will indicate the possible moves of the rook
 	 *         chess piece
