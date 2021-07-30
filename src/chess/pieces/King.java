@@ -38,8 +38,8 @@ public class King extends ChessPiece {
 	 * and if there is, it will verify if it is an opponent piece through the
 	 * {@link chess.ChessPiece#getColor()} method, which will indicate whether this
 	 * piece has a different color. These checks occur, because a king can only move
-	 * to a position that does not contain any piece, or a position that contains
-	 * one by the opponent, a piece of different color of the king
+	 * to a position that doesn't contain any piece, or a position that contains a
+	 * opponent, a piece of different color of the king
 	 * 
 	 * @param position a position
 	 * @return a boolean value that if true indicates that the king can move to the
