@@ -40,14 +40,15 @@ public class Rook extends ChessPiece {
 	 * boolean matrix that will contain the marked positions will be returned. To
 	 * mark the positions above the rook, for example, the following logic will be
 	 * applied: From the first position above the rook the analysis will take place.
-	 * As long as the positions above the rook exist within the board using
-	 * {@link boardgame.Board#positionExists(Position)} and do not contain a piece
-	 * using {@link boardgame.Board#thereIsAPiece(Position)} those positions will be
-	 * marked with true value. When this repetition ends, it will be tested if there
-	 * is one more position above, and if that possible position contains an
-	 * opponent piece, if these conditions are met, then this position will also be
-	 * marked as true. This same logic occurs for the other directions in an adapted
-	 * way
+	 * As long as the positions above the rook exist within the board when verifying
+	 * using {@link boardgame.Board#positionExists(Position)} and do not contain a
+	 * piece when checking using {@link boardgame.Board#thereIsAPiece(Position)}
+	 * those positions will be marked with true value. When this repetition ends, it
+	 * will be tested if there is one more position above, and when verifying if
+	 * that possible position contains an opponent piece using
+	 * {@link chess.ChessPiece#isThereOpponentPiece(Position)}, if these conditions
+	 * are met, then this position will also be marked as true. This same logic
+	 * occurs for the other directions in an adapted way
 	 * 
 	 * @return a boolean matrix that will indicate the possible moves of the rook
 	 *         chess piece
@@ -58,7 +59,7 @@ public class Rook extends ChessPiece {
 
 		Position p = new Position(0, 0);
 
-		// logic to mark positions above the rook as possible moves (above)
+		// logic to mark positions above the rook as possible moves 
 		p.setValues(position.getRow() - 1, position.getColumn());
 		while (getBoard().positionExists(p) && !getBoard().thereIsAPiece(p)) {
 			matrix[p.getRow()][p.getColumn()] = true;
@@ -68,7 +69,7 @@ public class Rook extends ChessPiece {
 			matrix[p.getRow()][p.getColumn()] = true;
 		}
 
-		// logic to mark positions to the left of the rook as possible moves (left)
+		// logic to mark positions to the left of the rook as possible moves 
 		p.setValues(position.getRow(), position.getColumn() - 1);
 		while (getBoard().positionExists(p) && !getBoard().thereIsAPiece(p)) {
 			matrix[p.getRow()][p.getColumn()] = true;
@@ -78,7 +79,7 @@ public class Rook extends ChessPiece {
 			matrix[p.getRow()][p.getColumn()] = true;
 		}
 
-		// logic to mark positions to the right of the rook as possible moves (right)
+		// logic to mark positions to the right of the rook as possible moves 
 		p.setValues(position.getRow(), position.getColumn() + 1);
 		while (getBoard().positionExists(p) && !getBoard().thereIsAPiece(p)) {
 			matrix[p.getRow()][p.getColumn()] = true;
@@ -88,7 +89,7 @@ public class Rook extends ChessPiece {
 			matrix[p.getRow()][p.getColumn()] = true;
 		}
 
-		// logic to mark positions below the rook as possible moves (below)
+		// logic to mark positions below the rook as possible moves 
 		p.setValues(position.getRow() + 1, position.getColumn());
 		while (getBoard().positionExists(p) && !getBoard().thereIsAPiece(p)) {
 			matrix[p.getRow()][p.getColumn()] = true;
