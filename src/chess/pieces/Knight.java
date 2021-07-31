@@ -29,7 +29,7 @@ public class Knight extends ChessPiece {
 	 */
 	@Override
 	public String toString() {
-		return "N";
+		return "H";  // H of Horseman
 	}
 
 	/**

@@ -146,9 +146,15 @@ public class ChessMatch {
 	 * a chess piece movement is:Takes the chess piece contained in the source of
 	 * the move, and puts that piece in the target of the move. If there was a piece
 	 * in the move target, it is then captured and removed from the board, making it
-	 * now part of the captured pieces list. Moreover, when a piece makes a move,
+	 * now part of the captured pieces list. Furthermore, when a piece makes a move,
 	 * its move counter increases using the
-	 * {@link chess.ChessPiece#increaseMoveCount()} method
+	 * {@link chess.ChessPiece#increaseMoveCount()} method. However, if the moved
+	 * piece was a king that moved two positions towards the rook on the king's
+	 * side, then this would indicate that the small castling move was used, and
+	 * that as a result, the rook must be placed to the king's left. But if the
+	 * moved piece was a king that moved two positions towards the queen side rook,
+	 * then this would indicate that the big castling move was used, so the queen
+	 * side rook must be placed to the king's right.
 	 * 
 	 * @param source source position
 	 * @param target target position
@@ -164,6 +170,25 @@ public class ChessMatch {
 			piecesOnTheBoard.remove(capturedPiece);
 			capturedPieces.add(capturedPiece);
 		}
+
+		// special move small castling (castling king side rook)
+		if (p instanceof King && target.getColumn() == source.getColumn() + 2) {
+			Position sourceRook = new Position(source.getRow(), source.getColumn() + 3);
+			Position targetRook = new Position(source.getRow(), source.getColumn() + 1);
+			ChessPiece rook = (ChessPiece) board.removePiece(sourceRook);
+			board.placePiece(rook, targetRook);
+			rook.increaseMoveCount();
+		}
+
+		// special move big castling (castling queen side rook)
+		if (p instanceof King && target.getColumn() == source.getColumn() - 2) {
+			Position sourceRook = new Position(source.getRow(), source.getColumn() - 4);
+			Position targetRook = new Position(source.getRow(), source.getColumn() - 1);
+			ChessPiece rook = (ChessPiece) board.removePiece(sourceRook);
+			board.placePiece(rook, targetRook);
+			rook.increaseMoveCount();
+		}
+
 		return capturedPiece;
 	}
 
@@ -176,7 +201,10 @@ public class ChessMatch {
 	 * pieces in their proper places, {@link boardgame.Board#removePiece(Position)}
 	 * and {@link boardgame.Board#placePiece(Piece, Position)} methods are used.
 	 * Moreover, when a piece undo a move, its move counter decreases using the
-	 * {@link chess.ChessPiece#decreaseMoveCount()} method
+	 * {@link chess.ChessPiece#decreaseMoveCount()} method. Furthermore, this method
+	 * also contains the logic of undoing a castling move, which basically consists
+	 * of taking the rook that was placed in the target position, and putting it
+	 * back in the movement's source position.
 	 * 
 	 * @param source        source position
 	 * @param target        target position
@@ -191,6 +219,24 @@ public class ChessMatch {
 			board.placePiece(capturedPiece, target);
 			capturedPieces.remove(capturedPiece);
 			piecesOnTheBoard.add(capturedPiece);
+		}
+
+		// special move small castling (castling king side rook)
+		if (p instanceof Rook && target.getColumn() == source.getColumn() + 2) {
+			Position sourceRook = new Position(source.getRow(), source.getColumn() + 3);
+			Position targetRook = new Position(source.getRow(), source.getColumn() + 1);
+			ChessPiece rook = (ChessPiece) board.removePiece(targetRook);
+			board.placePiece(rook, sourceRook);
+			rook.decreaseMoveCount();
+		}
+
+		// special move big castling (castling queen side rook)
+		if (p instanceof Rook && target.getColumn() == source.getColumn() - 2) {
+			Position sourceRook = new Position(source.getRow(), source.getColumn() - 4);
+			Position targetRook = new Position(source.getRow(), source.getColumn() - 1);
+			ChessPiece rook = (ChessPiece) board.removePiece(targetRook);
+			board.placePiece(rook, sourceRook);
+			rook.decreaseMoveCount();
 		}
 	}
 
@@ -388,7 +434,7 @@ public class ChessMatch {
 		placeNewPiece('b', 1, new Knight(board, Color.WHITE));
 		placeNewPiece('c', 1, new Bishop(board, Color.WHITE));
 		placeNewPiece('d', 1, new Queen(board, Color.WHITE));
-		placeNewPiece('e', 1, new King(board, Color.WHITE));
+		placeNewPiece('e', 1, new King(board, Color.WHITE, this));
 		placeNewPiece('f', 1, new Bishop(board, Color.WHITE));
 		placeNewPiece('g', 1, new Knight(board, Color.WHITE));
 		placeNewPiece('h', 1, new Rook(board, Color.WHITE));
@@ -405,7 +451,7 @@ public class ChessMatch {
 		placeNewPiece('b', 8, new Knight(board, Color.BLACK));
 		placeNewPiece('c', 8, new Bishop(board, Color.BLACK));
 		placeNewPiece('d', 8, new Queen(board, Color.BLACK));
-		placeNewPiece('e', 8, new King(board, Color.BLACK));
+		placeNewPiece('e', 8, new King(board, Color.BLACK, this));
 		placeNewPiece('f', 8, new Bishop(board, Color.BLACK));
 		placeNewPiece('g', 8, new Knight(board, Color.BLACK));
 		placeNewPiece('h', 8, new Rook(board, Color.BLACK));
