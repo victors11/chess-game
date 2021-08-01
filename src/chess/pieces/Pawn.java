@@ -2,6 +2,7 @@ package chess.pieces;
 
 import boardgame.Board;
 import boardgame.Position;
+import chess.ChessMatch;
 import chess.ChessPiece;
 import chess.Color;
 
@@ -13,17 +14,21 @@ import chess.Color;
  */
 public class Pawn extends ChessPiece {
 
+	private ChessMatch chessMatch;
+
 	/**
 	 * creates the pawn chess piece, which is associated with a board and has a
-	 * color
+	 * color besides having an dependency with a chess match
 	 * 
-	 * @param board chessboard
-	 * @param color piece color
+	 * @param board      chessboard
+	 * @param color      piece color
+	 * @param chessMatch chess match
 	 */
-	public Pawn(Board board, Color color) {
+	public Pawn(Board board, Color color, ChessMatch chessMatch) {
 		super(board, color);
+		this.chessMatch = chessMatch;
 	}
-	
+
 	/**
 	 * @return the symbol that will represent the pawn piece
 	 */
@@ -49,7 +54,12 @@ public class Pawn extends ChessPiece {
 	 * is analyzed, through the
 	 * {@link chess.ChessPiece#isThereOpponentPiece(Position)} method. Black pawns
 	 * follow the same rules of movement, with the exception that they move down
-	 * only.
+	 * only. Added to that, the pawn will have one possible additional move with the
+	 * use of the en passant special move. Then it is checked, if the piece that is
+	 * on the left or right side of the pawn is an opponent pawn using the
+	 * {@link chess.ChessMatch#getEnPassantVulnerable()} method. If the opponent
+	 * pawn is vulnerable to en passant, then the pawn will be able to perform the
+	 * special move
 	 */
 	@Override
 	public boolean[][] possibleMoves() {
@@ -80,6 +90,21 @@ public class Pawn extends ChessPiece {
 			if (getBoard().positionExists(p) && isThereOpponentPiece(p)) {
 				matrix[p.getRow()][p.getColumn()] = true;
 			}
+
+			// special move en passant white
+			if (position.getRow() == 3) {
+				Position left = new Position(position.getRow(), position.getColumn() - 1);
+				boolean PawnIsEnPassantVulnerable = getBoard().piece(left) == chessMatch.getEnPassantVulnerable();
+				if (getBoard().positionExists(left) && isThereOpponentPiece(left) && PawnIsEnPassantVulnerable) {
+					matrix[left.getRow() - 1][left.getColumn()] = true;
+				}
+				Position right = new Position(position.getRow(), position.getColumn() + 1);
+				PawnIsEnPassantVulnerable = getBoard().piece(right) == chessMatch.getEnPassantVulnerable();
+				if (getBoard().positionExists(right) && isThereOpponentPiece(right) && PawnIsEnPassantVulnerable) {
+					matrix[right.getRow() - 1][right.getColumn()] = true;
+				}
+			}
+
 		} else {
 			// above one
 			p.setValues(position.getRow() + 1, position.getColumn());
@@ -102,6 +127,20 @@ public class Pawn extends ChessPiece {
 			p.setValues(position.getRow() + 1, position.getColumn() + 1);
 			if (getBoard().positionExists(p) && isThereOpponentPiece(p)) {
 				matrix[p.getRow()][p.getColumn()] = true;
+			}
+
+			// special move en passant black
+			if (position.getRow() == 4) {
+				Position left = new Position(position.getRow(), position.getColumn() - 1);
+				boolean pawnIsEnPassantVulnerable = getBoard().piece(left) == chessMatch.getEnPassantVulnerable();
+				if (getBoard().positionExists(left) && isThereOpponentPiece(left) && pawnIsEnPassantVulnerable) {
+					matrix[left.getRow() + 1][left.getColumn()] = true;
+				}
+				Position right = new Position(position.getRow(), position.getColumn() + 1);
+				pawnIsEnPassantVulnerable = getBoard().piece(right) == chessMatch.getEnPassantVulnerable();
+				if (getBoard().positionExists(right) && isThereOpponentPiece(right) && pawnIsEnPassantVulnerable) {
+					matrix[right.getRow() + 1][right.getColumn()] = true;
+				}
 			}
 		}
 

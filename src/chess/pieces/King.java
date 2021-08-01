@@ -18,10 +18,11 @@ public class King extends ChessPiece {
 
 	/**
 	 * creates the king chess piece, which is associated with a board and has a
-	 * color
+	 * color besides having an dependency with a chess match
 	 * 
 	 * @param board chessboard
 	 * @param color piece color
+	 * @param chessMatch chess match
 	 */
 	public King(Board board, Color color, ChessMatch chessMatch) {
 		super(board, color);
@@ -92,7 +93,7 @@ public class King extends ChessPiece {
 	 * vacant, if they are and by checking using the
 	 * {@link #testRookCastling(Position)} method if the rook on the king side is
 	 * suitable for the castling move, then the small castling move can be performed
-	 * and the two-column position towards that rook will be marked as true. there
+	 * and the two-column position towards that rook will be marked as true. There
 	 * is also the possibility of making the big castling movement that follows the
 	 * same logic as the small one, but with the rook on the queen's side.
 	 * 
