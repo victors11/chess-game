@@ -1,6 +1,5 @@
 package chess;
 
-import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -184,9 +183,9 @@ public class ChessMatch {
 	 * then the new chosen piece is added using the {@link #newPiece(String, Color)}
 	 * and {@link boardgame.Board#placePiece(Piece, Position)} methods. If the
 	 * promoted piece equals null, it means there is no promoted piece to be
-	 * replaced so an IllegalStateException will be thrown. If the type of the part
-	 * chosen to exchange for the promoted one is of an invalid type, an
-	 * InvalidParameterException will be thrown
+	 * replaced so an IllegalStateException will be thrown. If the type of the piece
+	 * chosen to exchange for the promoted one is of an invalid type, then this
+	 * method will return the piece chosen as the default in the promotion.
 	 * 
 	 * @param type the chess piece type symbol indicating which chess piece will
 	 *             replace the promoted piece.
@@ -198,7 +197,7 @@ public class ChessMatch {
 		}
 		boolean invalidChosenType = !type.equals("Q") && !type.equals("H") && !type.equals("R") && !type.equals("B");
 		if (invalidChosenType) {
-			throw new InvalidParameterException("Invalid type for promotion");
+			return promoted;
 		}
 
 		Position promotedPosition = promoted.getChessPosition().toPosition();
