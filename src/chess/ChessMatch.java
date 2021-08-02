@@ -1,5 +1,6 @@
 package chess;
 
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,6 +29,7 @@ public class ChessMatch {
 	private boolean check;
 	private boolean checkMate;
 	private ChessPiece enPassantVulnerable;
+	private ChessPiece promoted;
 	private Board board;
 
 	private List<Piece> piecesOnTheBoard = new ArrayList<>();
@@ -64,6 +66,10 @@ public class ChessMatch {
 
 	public ChessPiece getEnPassantVulnerable() {
 		return enPassantVulnerable;
+	}
+
+	public ChessPiece getPromoted() {
+		return promoted;
 	}
 
 	/**
@@ -117,9 +123,11 @@ public class ChessMatch {
 	 * been checked. Finally, it is tested whether the move resulted in a checkmate
 	 * to the opponent using the {@link #checkMate} method. If it worked then the
 	 * game will be over, if it didn't then the next turn will be executed by the
-	 * {@link #nextTurn()} method. Furthermore, it is also checked whether the piece
-	 * that was moved is a pawn vulnerable to the special move en passant. A pawn is
-	 * vulnerable if it has moved two positions in the same turn.
+	 * {@link #nextTurn()} method. Furthermore, it is checked whether the piece that
+	 * was moved is a pawn vulnerable to the special move en passant (A pawn is
+	 * vulnerable if it has moved two positions in the same turn) and also checked
+	 * whether if a promotion has occurred. By default the promoted pawn will be
+	 * replaced by a queen by the {@link #replacePromotedPiece(String)}
 	 * 
 	 * @param sourcePosition source position
 	 * @param targetPosition targe position
@@ -139,6 +147,17 @@ public class ChessMatch {
 
 		ChessPiece movedPiece = (ChessPiece) board.piece(target);
 
+		// special move promotion
+		promoted = null;
+		if (movedPiece instanceof Pawn) {
+			boolean whitePieceReachedTheEnd = movedPiece.getColor() == Color.WHITE && target.getRow() == 0;
+			boolean blackPieceReachedTheEnd = movedPiece.getColor() == Color.BLACK && target.getRow() == 7;
+			if (whitePieceReachedTheEnd || blackPieceReachedTheEnd) {
+				promoted = (ChessPiece) board.piece(target);
+				promoted = replacePromotedPiece("Q");
+			}
+		}
+
 		check = (testCheck(opponent(currentPlayer))) ? true : false;
 
 		if (testCheckMate(opponent(currentPlayer))) {
@@ -156,6 +175,59 @@ public class ChessMatch {
 		}
 
 		return (ChessPiece) capturedPiece;
+	}
+
+	/**
+	 * replace a piece promoted by a queen, knight, rook, or bishop of the same
+	 * color. For this, the piece that was in the promotion position is removed from
+	 * the board using the {@link boardgame.Board#removePiece(Position)} method, and
+	 * then the new chosen piece is added using the {@link #newPiece(String, Color)}
+	 * and {@link boardgame.Board#placePiece(Piece, Position)} methods. If the
+	 * promoted piece equals null, it means there is no promoted piece to be
+	 * replaced so an IllegalStateException will be thrown. If the type of the part
+	 * chosen to exchange for the promoted one is of an invalid type, an
+	 * InvalidParameterException will be thrown
+	 * 
+	 * @param type the chess piece type symbol indicating which chess piece will
+	 *             replace the promoted piece.
+	 * @return the chess piece that will replace the promoted piece.
+	 */
+	public ChessPiece replacePromotedPiece(String type) {
+		if (promoted == null) {
+			throw new IllegalStateException("There is no piece to be promoted");
+		}
+		boolean invalidChosenType = !type.equals("Q") && !type.equals("H") && !type.equals("R") && !type.equals("B");
+		if (invalidChosenType) {
+			throw new InvalidParameterException("Invalid type for promotion");
+		}
+
+		Position promotedPosition = promoted.getChessPosition().toPosition();
+		Piece p = board.removePiece(promotedPosition);
+		piecesOnTheBoard.remove(p);
+
+		ChessPiece newPiece = newPiece(type, promoted.getColor());
+		board.placePiece(newPiece, promotedPosition);
+		piecesOnTheBoard.add(newPiece);
+		return newPiece;
+	}
+
+	/**
+	 * Will return a piece given a symbol of the type of the piece and also a color
+	 * 
+	 * @param type  the chess piece type symbol indicating which chess piece will
+	 *              replace the promoted piece.
+	 * @param color player color
+	 * @return a piece given a symbol of the type of the piece and also a color
+	 */
+	private ChessPiece newPiece(String type, Color color) {
+		if (type.equals("Q"))
+			return new Queen(board, color);
+		if (type.equals("H"))
+			return new Knight(board, color);
+		if (type.equals("R"))
+			return new Rook(board, color);
+		else
+			return new Bishop(board, color);
 	}
 
 	/**
@@ -245,7 +317,7 @@ public class ChessMatch {
 	 * {@link chess.ChessPiece#decreaseMoveCount()} method. Furthermore, this method
 	 * also contains the logic of undoing special moves like a castling move, which
 	 * basically consists of taking the rook that was placed in the target position,
-	 * and putting it back in the movement's source position, like a en passant
+	 * and putting it back in the movement's source position,and like a en passant
 	 * move, which basically consists check if a pawn moved diagonally and the
 	 * captured piece was vulnerable to en passant, if the conditions are met, the
 	 * generic code of undo moves will put the captured piece in the wrong position,
